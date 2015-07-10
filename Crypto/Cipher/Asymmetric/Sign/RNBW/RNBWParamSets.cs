@@ -111,31 +111,38 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW
         public enum RNBWParamNames : int
         {
             /// <summary>
-            /// Low security; N: 33, VI: 6, 12, 17, 22
+            /// Medium security.
+            /// <para>MaxText:, N: 33, VI: 6, 12, 17, 22, PublicKey Size: 32162, PrivateKey Size: 27896</para>
             /// </summary>
             N33L5,
             /// <summary>
-            /// Medium security; N: 49, VI: 19, 26, 32, 38
+            /// Medium security. 
+            /// <para>MaxText:, N: 49, VI: 19, 26, 32, 38, PublicKey Size: 76532, PrivateKey Size: 81858</para>
             /// </summary>
             N49L5,
             /// <summary>
-            /// Medium security; N: 54, VI: 21, 27, 34, 44
+            /// Medium security. 
+            /// <para>MaxText:, N: 54, VI: 21, 27, 34, 44, PublicKey Size: 101672, PrivateKey Size: 108406</para>
             /// </summary>
             N54L5,
             /// <summary>
-            /// High security; N: 58, VI: 24, 30, 37, 44
+            /// High security.
+            /// <para>MaxText:, N: 58, VI: 24, 30, 37, 44, PublicKey Size: 120392, PrivateKey Size: 131138</para>
             /// </summary>
             N58L5,
             /// <summary>
-            /// High security; N: 60, VI: 24, 30, 37, 45
+            /// High security.
+            /// <para>MaxText:, N: 60, VI: 24, 30, 37, 45, PublicKey Size: 136184, PrivateKey Size: 145574</para>
             /// </summary>
             N60L5,
             /// <summary>
-            /// High security; N: 63, VI: 26, 33, 40, 51
+            /// High security.
+            /// <para>MaxText:, N: 63, VI: 26, 33, 40, 51, PublicKey Size: 153952, PrivateKey Size: 167390</para>
             /// </summary>
             N63L5,
             /// <summary>
-            /// High security; N: 66, VI: 27, 35, 43, 54
+            /// High security.
+            /// <para>MaxText:, N: 66, VI: 27, 35, 43, 54, PublicKey Size: 177716, PrivateKey Size: 192182</para>
             /// </summary>
             N66L5
         }
@@ -158,7 +165,7 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW
             if (OId.Length != 4)
                 throw new CryptoAsymmetricException("RNBWParamSets:FromId", "OId must be 4 bytes in length!", new ArgumentException());
             if (OId[0] != (byte)AsymmetricEngines.Rainbow)
-                throw new CryptoAsymmetricException("RNBWParamSets:FromId", "OId is not a valid MPKC parameter id!", new ArgumentException());
+                throw new CryptoAsymmetricException("RNBWParamSets:FromId", "OId is not a valid Rainbow parameter id!", new ArgumentException());
 
             if (OId[3] == 1)
                 return (RNBWParameters)RNBWN33L5.DeepCopy();
@@ -245,31 +252,38 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW
 
         #region Parameter Sets
         /// <summary>
-        /// Low security; N: 33, VI: 6, 12, 17, 22
+        /// Medium security.
+        /// <para>MaxText:, N: 33, VI: 6, 12, 17, 22, PublicKey Size: 32162, PrivateKey Size: 27896</para>
         /// </summary>
         public static RNBWParameters RNBWN33L5 = new RNBWParameters(new byte[] { 4, 1, 1, 1 }, new int[] { 6, 12, 17, 22, 33 });
         /// <summary>
-        /// Medium security; N: 49, VI: 19, 26, 32, 38
+        /// Medium security. 
+        /// <para>MaxText:, N: 49, VI: 19, 26, 32, 38, PublicKey Size: 76532, PrivateKey Size: 81858</para>
         /// </summary>
         public static RNBWParameters RNBWN49L5 = new RNBWParameters(new byte[] { 4, 1, 2, 1 }, new int[] { 19, 26, 32, 38, 49 });
         /// <summary>
-        /// Medium security; N: 54, VI: 21, 27, 34, 44
+        /// Medium security. 
+        /// <para>MaxText:, N: 54, VI: 21, 27, 34, 44, PublicKey Size: 101672, PrivateKey Size: 108406</para>
         /// </summary>
         public static RNBWParameters RNBWN54L5 = new RNBWParameters(new byte[] { 4, 1, 3, 1 }, new int[] { 21, 27, 34, 44, 54 });
         /// <summary>
-        /// High security; N: 58, VI: 24, 30, 37, 44
+        /// High security.
+        /// <para>MaxText:, N: 58, VI: 24, 30, 37, 44, PublicKey Size: 120392, PrivateKey Size: 131138</para>
         /// </summary>
         public static RNBWParameters RNBWN58L5 = new RNBWParameters(new byte[] { 4, 1, 4, 1 }, new int[] { 24, 30, 37, 44, 58 });
         /// <summary>
-        /// High security; N: 60, VI: 24, 30, 37, 45
+        /// High security.
+        /// <para>MaxText:, N: 60, VI: 24, 30, 37, 45, PublicKey Size: 136184, PrivateKey Size: 145574</para>
         /// </summary>
         public static RNBWParameters RNBWN60L5 = new RNBWParameters(new byte[] { 4, 1, 5, 1 }, new int[] { 24, 30, 37, 45, 60 });
         /// <summary>
-        /// High security; N: 63, VI: 26, 33, 40, 51
+        /// High security.
+        /// <para>MaxText:, N: 63, VI: 26, 33, 40, 51, PublicKey Size: 153952, PrivateKey Size: 167390</para>
         /// </summary>
         public static RNBWParameters RNBWN63L5 = new RNBWParameters(new byte[] { 4, 1, 6, 1 }, new int[] { 26, 33, 40, 51, 63 });
         /// <summary>
-        /// High security; N: 66, VI: 27, 35, 43, 54
+        /// High security.
+        /// <para>MaxText:, N: 66, VI: 27, 35, 43, 54, PublicKey Size: 177716, PrivateKey Size: 192182</para>
         /// </summary>
         public static RNBWParameters RNBWN66L5 = new RNBWParameters(new byte[] { 4, 1, 7, 1 }, new int[] { 27, 35, 43, 54, 66 });
         #endregion

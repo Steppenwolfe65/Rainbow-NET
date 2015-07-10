@@ -134,29 +134,27 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW
         /// Initialize this class
         /// </summary>
         /// 
-        /// <param name="CiphersParams">The RNBWParameters instance containing the cipher settings</param>
+        /// <param name="CipherParams">The RNBWParameters instance containing the cipher settings</param>
         /// 
         /// <exception cref="CryptoAsymmetricSignException">Thrown if a Prng that requires pre-initialization is specified; (wrong constructor)</exception>
-        public RNBWKeyGenerator(RNBWParameters CiphersParams)
+        public RNBWKeyGenerator(RNBWParameters CipherParams)
         {
-            _rlweParams = CiphersParams;
+            if (CipherParams.RandomEngine == Prngs.PBPrng)
+                throw new CryptoAsymmetricSignException("RNBWKeyGenerator:Ctor", "Passphrase based digest and CTR generators must be pre-initialized, use the other constructor!", new ArgumentException());
 
-            if (CiphersParams.RandomEngine == Prngs.PBPrng)
-                throw new CryptoAsymmetricSignException("RNBWKeyGenerator:Ctor", "Passphrase based, digest, and CTR generators must be pre-initialized, use the other constructor!", new ArgumentException());
-
-            _rngEngine = GetPrng(CiphersParams.RandomEngine);
+            _rlweParams = CipherParams;
+            _rngEngine = GetPrng(CipherParams.RandomEngine);
         }
 
         /// <summary>
-        /// Use an initialized prng to generate the key; use this constructor with an Rng that requires pre-initialization, 
-        /// i.e. PBPrng, DGCPrng, or CTRPrng
+        /// Use an initialized prng to generate the key; use this constructor with an Rng that requires pre-initialization, i.e. PBPrng
         /// </summary>
         /// 
-        /// <param name="CiphersParams">The RNBWParameters instance containing thecipher settings</param>
+        /// <param name="CipherParams">The RNBWParameters instance containing the cipher settings</param>
         /// <param name="RngEngine">An initialized Prng instance</param>
-        public RNBWKeyGenerator(RNBWParameters CiphersParams, IRandom RngEngine)
+        public RNBWKeyGenerator(RNBWParameters CipherParams, IRandom RngEngine, bool Parallel = true)
         {
-            _rlweParams = CiphersParams;
+            _rlweParams = CipherParams;
             _rngEngine = RngEngine;
         }
 

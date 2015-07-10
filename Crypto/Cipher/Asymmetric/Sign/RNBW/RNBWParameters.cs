@@ -166,9 +166,9 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW
         public RNBWParameters(byte[] OId, int[] Vi, Prngs Engine = Prngs.CTRPrng)
         {
             if (OId.Length != OID_SIZE)
-                throw new CryptoAsymmetricException("RLWEParameters:Ctor", string.Format("The OId is invalid, the OId length must be {0} bytes!", OID_SIZE, new ArgumentException()));
+                throw new CryptoAsymmetricException("RNBWParameters:Ctor", string.Format("The OId is invalid, the OId length must be {0} bytes!", OID_SIZE, new ArgumentException()));
             if (OId[0] != (byte)AsymmetricEngines.Rainbow)
-                throw new CryptoAsymmetricException("RLWEParameters:Ctor", string.Format("The OId is invalid, first byte must be family designator ({0})!", AsymmetricEngines.RingLWE, new ArgumentException()));
+                throw new CryptoAsymmetricException("RNBWParameters:Ctor", string.Format("The OId is invalid, first byte must be family designator ({0})!", AsymmetricEngines.Rainbow, new ArgumentException()));
 
             _oId = OId;
             _VI = Vi;
@@ -182,14 +182,14 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW
         /// Reconstructs a RNBWParameters from its <c>byte</c> array representation.
         /// </summary>
         /// 
-        /// <param name="KeyStream">An input stream containing an encoded key</param>
+        /// <param name="ParamStream">An input stream containing an encoded key</param>
         /// 
         /// <exception cref="CryptoAsymmetricException">Thrown if the Stream is unreadable</exception>
-        public RNBWParameters(Stream KeyStream)
+        public RNBWParameters(Stream ParamStream)
         {
             try
             {
-                BinaryReader reader = new BinaryReader(KeyStream);
+                BinaryReader reader = new BinaryReader(ParamStream);
                 int len;
                 byte[] data;
 
@@ -210,9 +210,9 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW
         /// Reconstructs a public key from its <c>byte</c> array representation.
         /// </summary>
         /// 
-        /// <param name="Key">The encoded key array</param>
-        public RNBWParameters(byte[] Key) :
-            this(new MemoryStream(Key))
+        /// <param name="ParamArray">The encoded key array</param>
+        public RNBWParameters(byte[] ParamArray) :
+            this(new MemoryStream(ParamArray))
         {
         }
 
