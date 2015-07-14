@@ -38,7 +38,7 @@ using VTDev.Libraries.CEXEngine.Exceptions;
 // 
 // Implementation Details:
 // An implementation of an Rainbow Asymmetric Signature Scheme. 
-// Written by John Underhill, July 06, 2014
+// Written by John Underhill, July 06, 2015
 // contact: develop@vtdev.com
 #endregion
 

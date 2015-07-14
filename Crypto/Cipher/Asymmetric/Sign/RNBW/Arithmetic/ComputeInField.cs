@@ -12,11 +12,12 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW.Arithmeti
     /// solving linear equation systems using the Gauss-Elimination method,
     /// and basic operations like matrix multiplication, addition and so on.</para>
     /// </summary>
-    internal class ComputeInField
+    internal sealed class ComputeInField : IDisposable
     {
         #region Fields
         private short[][] _A;
         private short[] _X;
+        private bool _isDisposed = false;
         #endregion
 
         #region Constructor
@@ -25,6 +26,14 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW.Arithmeti
         /// </summary>
         public ComputeInField()
         {
+        }
+        
+        /// <summary>
+        /// Finalize objects
+        /// </summary>
+        ~ComputeInField()
+        {
+            Dispose(false);
         }
         #endregion
 
@@ -138,7 +147,7 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW.Arithmeti
                 return inverse;
 
             }
-            catch (Exception ex)
+            catch
             {
                 // The matrix is not invertible! A new one should be generated!
                 return null;
@@ -185,7 +194,7 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW.Arithmeti
         /// </summary>
         /// 
         /// <param name="M1">The matrix to be multiplied</param>
-        /// <param name="m">The one-dimensional array to be multiplied</param>
+        /// <param name="M">The one-dimensional array to be multiplied</param>
         /// 
         /// <returns>Returns <c>M1*m</c></returns>
         /// 
@@ -292,8 +301,7 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW.Arithmeti
                 if (B.Length != Br.Length)
                     throw new CryptoAsymmetricSignException("ComputeInField:SolveEquation", "The equation system is not solvable!", new ArgumentException());
 
-                /// initialize
-                // this matrix stores B and b from the equation B*x = b, b is stored as the last column.
+                // initialize this matrix stores B and b from the equation B*x = b, b is stored as the last column.
                 // B contains one column more than rows, In this column we store a free coefficient that should be later subtracted from b
                 _A = ArrayUtils.CreateJagged<short[][]>(B.Length, B.Length + 1);
                 // stores the solution of the LES
@@ -318,7 +326,7 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW.Arithmeti
                 return _X;
 
             }
-            catch (Exception rte)
+            catch
             {
                 // the LES is not solvable!
                 return null; 
@@ -427,7 +435,7 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW.Arithmeti
             if (temp == 0)
                 throw new CryptoAsymmetricSignException("ComputeInField:Substitute", "The equation system is not solvable!", new ArgumentException());
 
-            /** backward substitution **/
+            // backward substitution
             _X[_A.Length - 1] = GF2Field.MultElem(_A[_A.Length - 1][_A.Length], temp);
             for (int i = _A.Length - 2; i >= 0; i--)
             {
@@ -444,6 +452,40 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW.Arithmeti
                     throw new CryptoAsymmetricSignException("ComputeInField:Substitute", "Not a solvable equation system!", new ArgumentException());
                 
                 _X[i] = GF2Field.MultElem(tmp, temp);
+            }
+        }
+        #endregion
+
+        #region IDispose
+        /// <summary>
+        /// Dispose of this class
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool Disposing)
+        {
+            if (!_isDisposed && Disposing)
+            {
+                try
+                {
+                    if (_A != null)
+                    {
+                        Array.Clear(_A, 0, _A.Length);
+                        _A = null;
+                    }
+                    if (_X != null)
+                    {
+                        Array.Clear(_X, 0, _X.Length);
+                        _X = null;
+                    }
+                }
+                catch { }
+
+                _isDisposed = true;
             }
         }
         #endregion

@@ -1,7 +1,5 @@
 ﻿#region Directives
 using System;
-using System.Diagnostics;
-using VTDev.Libraries.CEXEngine.Crypto.Prng;
 using System.IO;
 #endregion
 
@@ -139,6 +137,62 @@ namespace VTDev.Libraries.CEXEngine.Utility
                 Array.Copy(Source, Index, copy, Index + Data.Length, Source.Length - Index);
 
             Source = copy;
+        }
+
+        /// <summary>
+        /// Create a deep copy of a byte array
+        /// </summary>
+        /// <param name="A">The array to copy</param>
+        /// 
+        /// <returns>Returns the array copy</returns>
+        internal static byte[] Clone(byte[] A)
+        {
+            byte[] result = new byte[A.Length];
+            Array.Copy(A, 0, result, 0, A.Length);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Create a deep copy of a Int16 array
+        /// </summary>
+        /// <param name="A">The array to copy</param>
+        /// 
+        /// <returns>Returns the array copy</returns>
+        internal static short[] Clone(short[] A)
+        {
+            short[] result = new short[A.Length];
+            Array.Copy(A, 0, result, 0, A.Length);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Create a deep copy of a Int32 array
+        /// </summary>
+        /// <param name="A">The array to copy</param>
+        /// 
+        /// <returns>Returns the array copy</returns>
+        internal static int[] Clone(int[] A)
+        {
+            int[] result = new int[A.Length];
+            Array.Copy(A, 0, result, 0, A.Length);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Create a deep copy of a Int64 array
+        /// </summary>
+        /// <param name="A">The array to copy</param>
+        /// 
+        /// <returns>Returns the array copy</returns>
+        internal static long[] Clone(long[] A)
+        {
+            long[] result = new long[A.Length];
+            Array.Copy(A, 0, result, 0, A.Length);
+
+            return result;
         }
 
         /// <summary>
@@ -507,7 +561,7 @@ namespace VTDev.Libraries.CEXEngine.Utility
         }
 
         /// <summary>
-        /// Copy an byte array to a short array
+        /// Copy a byte array to a short array
         /// </summary>
         /// 
         /// <param name="Data">Array to convert</param>
@@ -522,7 +576,7 @@ namespace VTDev.Libraries.CEXEngine.Utility
         }
 
         /// <summary>
-        /// Copy an byte array to a ushort array
+        /// Copy a byte array to a ushort array
         /// </summary>
         /// 
         /// <param name="Data">Array to convert</param>
@@ -537,7 +591,7 @@ namespace VTDev.Libraries.CEXEngine.Utility
         }
 
         /// <summary>
-        /// Copy an byte array to a int array
+        /// Copy a byte array to a int array
         /// </summary>
         /// 
         /// <param name="Data">Array to convert</param>
@@ -552,7 +606,7 @@ namespace VTDev.Libraries.CEXEngine.Utility
         }
 
         /// <summary>
-        /// Copy an byte array to a uint array
+        /// Copy a byte array to a uint array
         /// </summary>
         /// 
         /// <param name="Data">Array to convert</param>
@@ -567,7 +621,7 @@ namespace VTDev.Libraries.CEXEngine.Utility
         }
 
         /// <summary>
-        /// Copy an byte array to a long array
+        /// Copy a byte array to a long array
         /// </summary>
         /// 
         /// <param name="Data">Array to convert</param>
@@ -582,7 +636,7 @@ namespace VTDev.Libraries.CEXEngine.Utility
         }
 
         /// <summary>
-        /// Copy an byte array to a ulong array
+        /// Copy a byte array to a ulong array
         /// </summary>
         /// 
         /// <param name="Data">Array to convert</param>
@@ -597,7 +651,7 @@ namespace VTDev.Libraries.CEXEngine.Utility
         }
 
         /// <summary>
-        /// Copy an sbyte array to a byte array
+        /// Copy a sbyte array to a byte array
         /// </summary>
         /// 
         /// <param name="Data">Array to convert</param>
@@ -612,7 +666,7 @@ namespace VTDev.Libraries.CEXEngine.Utility
         }
 
         /// <summary>
-        /// Copy an int array to a byte array
+        /// Copy a int array to a byte array
         /// </summary>
         /// 
         /// <param name="Data">Array to convert</param>
@@ -627,7 +681,7 @@ namespace VTDev.Libraries.CEXEngine.Utility
         }
 
         /// <summary>
-        /// Copy an int array to a byte array
+        /// Copy a int array to a byte array
         /// </summary>
         /// 
         /// <param name="Data">Array to convert</param>
@@ -642,7 +696,7 @@ namespace VTDev.Libraries.CEXEngine.Utility
         }
 
         /// <summary>
-        /// Copy an int array to a byte array
+        /// Copy a int array to a byte array
         /// </summary>
         /// 
         /// <param name="Data">Array to convert</param>
@@ -657,7 +711,7 @@ namespace VTDev.Libraries.CEXEngine.Utility
         }
 
         /// <summary>
-        /// Copy an uint array to a byte array
+        /// Copy a uint array to a byte array
         /// </summary>
         /// 
         /// <param name="Data">Array to convert</param>
@@ -672,7 +726,7 @@ namespace VTDev.Libraries.CEXEngine.Utility
         }
 
         /// <summary>
-        /// Copy an long array to a byte array
+        /// Copy a long array to a byte array
         /// </summary>
         /// 
         /// <param name="Data">Array to convert</param>
@@ -687,7 +741,7 @@ namespace VTDev.Libraries.CEXEngine.Utility
         }
 
         /// <summary>
-        /// Copy an long array to a byte array
+        /// Copy a long array to a byte array
         /// </summary>
         /// 
         /// <param name="Data">Array to convert</param>
@@ -711,6 +765,69 @@ namespace VTDev.Libraries.CEXEngine.Utility
         public static byte[] ToBytes(string Value)
         {
             return System.Text.Encoding.ASCII.GetBytes(Value);
+        }
+
+        /// <summary>
+        /// Copy a 2 dimensional jagged byte array to a one dimensional byte array
+        /// </summary>
+        /// 
+        /// <param name="Data">Array to convert</param>
+        /// 
+        /// <returns>2 dimensional byte jagged array converted to bytes</returns>
+        [CLSCompliant(false)]
+        public static byte[] ToBytes(byte[][] Data)
+        {
+            BinaryWriter writer = new BinaryWriter(new MemoryStream());
+            byte[] nd;
+
+            if (Data.Length == 0)
+                return null;
+
+            // write the lengths
+            writer.Write(Data.Length);
+            writer.Write(Data[0].Length);
+
+            // write the data
+            for (int i = 0; i < Data.Length; i++)
+            {
+                nd = new byte[Data[i].Length];
+                Buffer.BlockCopy(Data[i], 0, nd, 0, nd.Length);
+                writer.Write(nd);
+            }
+
+            return ((MemoryStream)writer.BaseStream).ToArray();
+        }
+
+        /// <summary>
+        /// Copy a 3 dimensional jagged byte array to a one dimensional byte array
+        /// </summary>
+        /// 
+        /// <param name="Data">Array to convert</param>
+        /// 
+        /// <returns>3 dimensional byte jagged array converted to bytes</returns>
+        [CLSCompliant(false)]
+        public static byte[] ToBytes(byte[][][] Data)
+        {
+            BinaryWriter writer = new BinaryWriter(new MemoryStream());
+            byte[] nd;
+
+            // write the lengths
+            writer.Write(Data.Length);
+            writer.Write(Data[0].Length);
+            writer.Write(Data[0][0].Length);
+
+            // write the data
+            for (int i = 0; i < Data.Length; i++)
+            {
+                for (int j = 0; j < Data[i].Length; j++)
+                {
+                    nd = new byte[Data[i][j].Length];
+                    Buffer.BlockCopy(Data[i][j], 0, nd, 0, nd.Length);
+                    writer.Write(nd);
+                }
+            }
+
+            return ((MemoryStream)writer.BaseStream).ToArray();
         }
 
         /// <summary>
@@ -894,6 +1011,39 @@ namespace VTDev.Libraries.CEXEngine.Utility
         }
 
         /// <summary>
+        /// Convert a byte array to a 2 dimensional jagged byte array
+        /// </summary>
+        /// 
+        /// <param name="Data">Array to convert</param>
+        /// 
+        /// <returns>2 dimensional byte jagged array</returns>
+        [CLSCompliant(false)]
+        public static byte[][] ToArray2x8(byte[] Data)
+        {
+            BinaryReader reader = new BinaryReader(new MemoryStream(Data));
+            int[] alen = new int[2];
+            byte[] db;
+            byte[][] ra;
+
+            // get the lengths
+            alen[0] = reader.ReadInt32();
+            alen[1] = reader.ReadInt32();
+
+            // init array
+            ra = CreateJagged<byte[][]>(alen);
+
+            // get the data
+            for (int i = 0; i < alen[0]; i++)
+            {
+                db = new byte[ra[i].Length];
+                db = reader.ReadBytes(db.Length);
+                Buffer.BlockCopy(db, 0, ra[i], 0, db.Length);
+            }
+
+            return ra;
+        }
+
+        /// <summary>
         /// Convert a byte array to a 2 dimensional Int16 jagged array
         /// </summary>
         /// 
@@ -987,6 +1137,43 @@ namespace VTDev.Libraries.CEXEngine.Utility
                 db = new byte[ra[i].Length * 8];
                 db = reader.ReadBytes(db.Length);
                 Buffer.BlockCopy(db, 0, ra[i], 0, db.Length);
+            }
+
+            return ra;
+        }
+
+        /// <summary>
+        /// Convert a byte array to a 3 dimensional jagged byte array
+        /// </summary>
+        /// 
+        /// <param name="Data">Array to convert</param>
+        /// 
+        /// <returns>3 dimensional byte jagged array</returns>
+        [CLSCompliant(false)]
+        public static byte[][][] ToArray3x8(byte[] Data)
+        {
+            BinaryReader reader = new BinaryReader(new MemoryStream(Data));
+            int[] alen = new int[3];
+            byte[] db;
+            byte[][][] ra;
+
+            // get the lengths
+            alen[0] = reader.ReadInt32();
+            alen[1] = reader.ReadInt32();
+            alen[2] = reader.ReadInt32();
+
+            // init array
+            ra = CreateJagged<byte[][][]>(alen);
+
+            // get the data
+            for (int i = 0; i < alen[0]; i++)
+            {
+                for (int j = 0; j < alen[1]; j++)
+                {
+                    db = new byte[ra[i][j].Length];
+                    db = reader.ReadBytes(db.Length);
+                    Buffer.BlockCopy(db, 0, ra[i][j], 0, db.Length);
+                }
             }
 
             return ra;

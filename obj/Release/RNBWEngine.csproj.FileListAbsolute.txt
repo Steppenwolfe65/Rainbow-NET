@@ -1,4 +1,5 @@
 C:\Users\John\Documents\Visual Studio 2010\Projects\Cryptography\Rainbow\bin\Release\RLWEEngine.dll
 C:\Users\John\Documents\Visual Studio 2010\Projects\Cryptography\Rainbow\bin\Release\RLWEEngine.pdb
+C:\Users\John\Documents\Visual Studio 2010\Projects\Cryptography\Rainbow\obj\Release\RNBWEngine.csprojResolveAssemblyReference.cache
 C:\Users\John\Documents\Visual Studio 2010\Projects\Cryptography\Rainbow\obj\Release\RLWEEngine.dll
 C:\Users\John\Documents\Visual Studio 2010\Projects\Cryptography\Rainbow\obj\Release\RLWEEngine.pdb

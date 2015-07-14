@@ -43,7 +43,7 @@ using VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW.Arithmetic;
 // 
 // Implementation Details:
 // An implementation of an Rainbow Asymmetric Signature Scheme. 
-// Written by John Underhill, July 06, 2014
+// Written by John Underhill, July 06, 2015
 // contact: develop@vtdev.com
 #endregion
 
@@ -59,7 +59,7 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW
     /// byte[] code;
     /// byte[] data = new byte[100];
     /// 
-    /// RNBWParameters kpm = RNBWParamSets.RNBWN33L5;
+    /// RNBWParameters kpm = (RNBWParameters)RNBWParamSets.RNBWN33L5.DeepCopy();
     /// RNBWKeyGenerator gen = new RNBWKeyGenerator(kpm);
     /// IAsymmetricKeyPair keyPair = gen.GenerateKeyPair();
     ///
@@ -73,7 +73,7 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW
     /// // test the message for validity
     /// using (RNBWSign sign = new RNBWSign(kpm))
     /// {
-    ///     sign.Initialize(new kp.PublicKey);
+    ///     sign.Initialize(kp.PublicKey);
     ///     bool valid = sign.Verify(data, 0, data.Length, code);
     /// }
     /// </code>
@@ -115,6 +115,14 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Get: The cipher has been initialized with a key
+        /// </summary>
+        public bool IsInitialized
+        {
+            get { return _isInitialized; }
+        }
+
         /// <summary>
         /// Get: This class is initialized for Signing with the Private key
         /// </summary>
@@ -195,7 +203,7 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW
         /// Get the signing code for a stream
         /// </summary>
         /// 
-        /// <param name="InputStream">The stream contining the data</param>
+        /// <param name="InputStream">The stream containing the data</param>
         /// 
         /// <returns>The encrypted hash code</returns>
         /// 
@@ -391,7 +399,7 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW
                     for (int i = 0; i < S.Length; i++)
                         S[i] = ((byte)signature[i]);
                 }
-                catch (Exception se)
+                catch
                 {
                     // if one of the LESs was not solveable - sign again
                     ok = false;
@@ -563,6 +571,21 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW
                     {
                         _dgtEngine.Dispose();
                         _dgtEngine = null;
+                    }
+                    if (_rndEngine != null)
+                    {
+                        _rndEngine.Dispose();
+                        _rndEngine = null;
+                    }
+                    if (_cptIf != null)
+                    {
+                        _cptIf.Dispose();
+                        _cptIf = null;
+                    }
+                    if (_X != null)
+                    {
+                        Array.Clear(_X, 0, _X.Length);
+                        _X = null;
                     }
                 }
                 catch { }

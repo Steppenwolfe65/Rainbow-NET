@@ -42,7 +42,7 @@ using System.Threading.Tasks;
 // 
 // Implementation Details:
 // An implementation of an Rainbow Asymmetric Signature Scheme. 
-// Written by John Underhill, July 06, 2014
+// Written by John Underhill, July 06, 2015
 // contact: develop@vtdev.com
 #endregion
 
@@ -152,7 +152,7 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW
         /// 
         /// <param name="CipherParams">The RNBWParameters instance containing the cipher settings</param>
         /// <param name="RngEngine">An initialized Prng instance</param>
-        public RNBWKeyGenerator(RNBWParameters CipherParams, IRandom RngEngine, bool Parallel = true)
+        public RNBWKeyGenerator(RNBWParameters CipherParams, IRandom RngEngine)
         {
             _rlweParams = CipherParams;
             _rngEngine = RngEngine;
@@ -233,19 +233,19 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW
             int dim = _VI[_VI.Length - 1] - _VI[0];
             _A1 = ArrayUtils.CreateJagged<short[][]>(dim, dim);
             _A1Inv = null;
-            ComputeInField cif = new ComputeInField();
-
-            // generation of A1 at random
-            while (_A1Inv == null)
+            using (ComputeInField cif = new ComputeInField())
             {
-                for (int i = 0; i < dim; i++)
+                // generation of A1 at random
+                while (_A1Inv == null)
                 {
-                    for (int j = 0; j < dim; j++)
-                        _A1[i][j] = (short)(_rngEngine.Next() & GF2Field.MASK);
+                    for (int i = 0; i < dim; i++)
+                    {
+                        for (int j = 0; j < dim; j++)
+                            _A1[i][j] = (short)(_rngEngine.Next() & GF2Field.MASK);
+                    }
+                    _A1Inv = cif.Inverse(_A1);
                 }
-                _A1Inv = cif.Inverse(_A1);
             }
-
             // generation of the translation vector at random
             _B1 = new short[dim];
             for (int i = 0; i < dim; i++)
@@ -265,19 +265,20 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW
             int dim = _VI[_VI.Length - 1];
             _A2 = ArrayUtils.CreateJagged<short[][]>(dim, dim);
             _A2Inv = null;
-            ComputeInField cif = new ComputeInField();
 
-            // generation of A2 at random
-            while (_A2Inv == null)
+            using (ComputeInField cif = new ComputeInField())
             {
-                for (int i = 0; i < dim; i++)
+                // generation of A2 at random
+                while (_A2Inv == null)
                 {
-                    for (int j = 0; j < dim; j++)
-                        _A2[i][j] = (short)(_rngEngine.Next() & GF2Field.MASK);
+                    for (int i = 0; i < dim; i++)
+                    {
+                        for (int j = 0; j < dim; j++)
+                            _A2[i][j] = (short)(_rngEngine.Next() & GF2Field.MASK);
+                    }
+                    _A2Inv = cif.Inverse(_A2);
                 }
-                _A2Inv = cif.Inverse(_A2);
             }
-
             // generation of the translation vector at random
             _B2 = new short[dim];
             for (int i = 0; i < dim; i++)
@@ -420,6 +421,7 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW
             _pubScalar = tmpScal;
 
             CompactPublicKey(coeffQuadratic3d);
+            cif.Dispose();
         }
 
         /// <summary>
@@ -507,10 +509,15 @@ namespace VTDev.Libraries.CEXEngine.Crypto.Cipher.Asymmetric.Sign.RNBW
             {
                 try
                 {
-                    if (_rlweParams != null)
+                    if (_A1 != null)
                     {
-                        _rlweParams.Dispose();
-                        _rlweParams = null;
+                        Array.Clear(_A1, 0, _A1.Length);
+                        _A1 = null;
+                    }
+                    if (_A2 != null)
+                    {
+                        Array.Clear(_A2, 0, _A2.Length);
+                        _A2 = null;
                     }
                     if (_rngEngine != null)
                     {
