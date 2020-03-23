@@ -3,7 +3,11 @@
 
 An implementation of Rainbow in C#
 
-Details:
+##Status
+This repository is obsolete and remains online only for historical purposes.
+Please refer to the Rainbow inplementation in CEX++ for the new version (NIST PQ R2).
+
+##License:
 
 License is MIT
 
